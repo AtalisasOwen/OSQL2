@@ -1,5 +1,6 @@
 package com.atalisas.jdbc;
 
+import com.atalisas.OSQLClient;
 import domain.Temp;
 import org.junit.Test;
 import com.atalisas.util.ConnectionUtil;
@@ -16,12 +17,14 @@ public class JdbcInsertSessionTest {
     public void testInsertSession(){
         Temp t1 = new Temp(127, 100L);
         Temp t2 = new Temp(119, 200L);
+
         List<Temp> l = new ArrayList<>();
         l.add(new Temp(130, 20L));
         l.add(new Temp(140, 49L));
 
         Connection connection = ConnectionUtil.getConnection();
-        int results = new JdbcInsertSession(connection)
+        int results = OSQLClient.jdbc(() -> connection)
+                .startInsert()
                 .insert().into("temps")
                 .column("id").prop("id")
                 .column("hi_temp").prop("hiTemp")

@@ -32,14 +32,18 @@ public class JdbcSelectSession extends JdbcCommonSession<SelectSession> implemen
     }
 
     @Override
-    public <T> T buildObject(Class cls) {
+    public <T> T buildObject(Class<T> cls) {
         String sql = parseSQL();
         List<T> list = makeList(sql, cls);
-        return list.get(0);
+        if (list.size() == 0){
+            return null;
+        }else {
+            return list.get(0);
+        }
     }
 
     @Override
-    public <T> List<T> buildList(Class cls) {
+    public <T> List<T> buildList(Class<T> cls) {
         String sql = parseSQL();
         return makeList(sql, cls);
     }

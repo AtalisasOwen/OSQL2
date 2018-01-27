@@ -12,6 +12,6 @@ import java.util.List;
  */
 public interface SelectSession extends Select<Select.ToState>, Order<SelectSession>,
         Group<SelectSession>, From<SelectSession>,CommonSession<SelectSession> {
-    <T> T buildObject(Class cls);
-    <T> List<T> buildList(Class cls);
+    <T> T buildObject(Class<T> cls);
+    <T> List<T> buildList(Class<T> cls);
 }

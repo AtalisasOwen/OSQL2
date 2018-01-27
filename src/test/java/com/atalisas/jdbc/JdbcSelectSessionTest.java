@@ -17,17 +17,16 @@ public class JdbcSelectSessionTest {
     @Test
     public void testSelectSession(){
         Connection connection = ConnectionUtil.getConnection();
-        List<Temp> tempList =
-                new JdbcSelectSession(connection)
+        Temp tempList = new JdbcSelectSession(connection)
                         .select("id").to("id")
                         .select("hi_temp as HI").to("hiTemp")
                         .from("temps")
                         .groupBy("HI")
-                        .having("HI > 50")
+                        .having("HI = 50")
                         .orderBy("HI", true)
-                        .buildList(Temp.class);
+                        .buildObject(Temp.class);
 
-        tempList.stream().forEach(System.out::println);
+        System.out.println(tempList);
     }
 
     @Test
@@ -43,7 +42,8 @@ public class JdbcSelectSessionTest {
 
     @Test
     public void testAnotherSelect(){
-        List<AuthorOrders> list = OSQLClient.jdbc(ConnectionUtil::getConnection)
+        Connection connection = ConnectionUtil.getConnection();
+        List<AuthorOrders> list = OSQLClient.jdbc(() -> connection)
                 .startSelect()
                 .select("a.title_id").to("titleId")
                 .select("b.au_fname").to("authorName")
