@@ -1,10 +1,12 @@
 package com.atalisas.jdbc;
 
 import com.atalisas.crud.DeleteSession;
+import com.atalisas.util.async.ThreadPoolUtil;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.concurrent.Future;
 
 /**
  * Created by 顾文涛 on 2018/1/27.
@@ -42,6 +44,12 @@ public class JdbcDeleteSession extends JdbcCommonSession<DeleteSession> implemen
         }
         return result;
     }
+
+    @Override
+    public Future<Integer> executeAsync() {
+        return ThreadPoolUtil.execute(() -> execute());
+    }
+
 
     @Override
     public DeleteSession from(String table) {

@@ -2,6 +2,7 @@ package com.atalisas.jdbc;
 
 import com.atalisas.crud.SelectSession;
 import com.atalisas.util.StringsUtil;
+import com.atalisas.util.async.ThreadPoolUtil;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -11,6 +12,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.*;
+import java.util.concurrent.Future;
 
 /**
  * Created by 顾文涛 on 2018/1/27.
@@ -46,6 +48,16 @@ public class JdbcSelectSession extends JdbcCommonSession<SelectSession> implemen
     public <T> List<T> buildList(Class<T> cls) {
         String sql = parseSQL();
         return makeList(sql, cls);
+    }
+
+    @Override
+    public <T> Future<List<T>> buildListAsync(Class<T> cls) {
+        return ThreadPoolUtil.execute(() -> buildList(cls));
+    }
+
+    @Override
+    public <T> Future<T> buildObjectAsync(Class<T> cls) {
+        return ThreadPoolUtil.execute(() -> buildObject(cls));
     }
 
     private <T> List<T> makeList(String sql, Class clz) {

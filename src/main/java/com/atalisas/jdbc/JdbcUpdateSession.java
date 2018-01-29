@@ -1,10 +1,12 @@
 package com.atalisas.jdbc;
 
 import com.atalisas.crud.UpdateSession;
+import com.atalisas.util.async.ThreadPoolUtil;
 
 import java.sql.Connection;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.concurrent.Future;
 
 /**
  * Created by 顾文涛 on 2018/1/27.
@@ -55,6 +57,12 @@ public class JdbcUpdateSession extends JdbcCommonSession<UpdateSession>
         }
         return i;
     }
+
+    @Override
+    public Future<Integer> executeAsync() {
+        return ThreadPoolUtil.execute(() -> execute());
+    }
+
 
     @Override
     protected String parseSQL() {

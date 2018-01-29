@@ -2,6 +2,7 @@ package com.atalisas.jdbc;
 
 import com.atalisas.crud.InsertSession;
 import com.atalisas.util.StringsUtil;
+import com.atalisas.util.async.ThreadPoolUtil;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -11,6 +12,7 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.concurrent.Future;
 
 /**
  * Created by 顾文涛 on 2018/1/27.
@@ -65,6 +67,11 @@ public class JdbcInsertSession implements InsertSession {
             }
         }
         return result;
+    }
+
+    @Override
+    public Future<Integer> executeAsync() {
+        return ThreadPoolUtil.execute(() -> execute());
     }
 
     @Override
